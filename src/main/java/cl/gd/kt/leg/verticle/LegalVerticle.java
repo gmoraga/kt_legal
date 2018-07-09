@@ -2,7 +2,7 @@ package cl.gd.kt.leg.verticle;
 
 import cl.gd.kt.leg.service.ContractService;
 import cl.gd.kt.leg.verticle.api.ContractApiVerticle;
-import cl.gd.kt.leg.verticle.event.PublishEvent;
+import cl.gd.kt.leg.verticle.event.EmployeeListenerEvent;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServer;
@@ -76,8 +76,8 @@ public class LegalVerticle extends RestApiVerticle {
 		//API
 		vertx.deployVerticle(new ContractApiVerticle(router, this.contractService), this.svrOptsUltHg);
 		
-		//Publish
-		vertx.deployVerticle(new PublishEvent());
+		//Event
+		vertx.deployVerticle(new EmployeeListenerEvent());
 	}
 
 	/**
@@ -87,6 +87,7 @@ public class LegalVerticle extends RestApiVerticle {
 	 * @param port http port
 	 * @return async result of the procedure
 	 */
+	@Override
 	protected Future<Void> createHttpServer(Router router, int port) {
 		Future<HttpServer> httpServerFuture = Future.future();
 		vertx.createHttpServer().requestHandler(router::accept).listen(port, httpServerFuture.completer());
